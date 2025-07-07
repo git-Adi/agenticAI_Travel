@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: travel-agenticai
+    env: docker
+    plan: free
+    region: oregon
+    build:
+      dockerfile: Dockerfile
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "true"
+      - key: SERPAPI_API_KEY
+        fromService:
+          name: serpapi
+          type: serpapi
+          property: apiKey
+    numInstances: 1
+    healthCheckPath: /
