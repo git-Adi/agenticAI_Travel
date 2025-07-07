@@ -1,10 +1,14 @@
 services:
   - type: web
     name: travel-agenticai
-    env: docker
+    env: python
     plan: free
     region: oregon
+    buildCommand: "./build.sh"
+    startCommand: "streamlit run run.py --server.port=$PORT --server.address=0.0.0.0"
     envVars:
+      - key: PORT
+        value: "10000"
       - key: PYTHONUNBUFFERED
         value: "true"
       - key: SERPAPI_API_KEY
