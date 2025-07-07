@@ -4,15 +4,16 @@ services:
     env: docker
     plan: free
     region: oregon
-    build:
-      dockerfile: Dockerfile
     envVars:
       - key: PYTHONUNBUFFERED
         value: "true"
       - key: SERPAPI_API_KEY
-        fromService:
-          name: serpapi
-          type: serpapi
-          property: apiKey
+        value: your_serpapi_key_here  # Replace with your actual SERP API key
+      - key: STREAMLIT_SERVER_PORT
+        value: "10000"
+      - key: STREAMLIT_SERVER_HEADLESS
+        value: "true"
+      - key: STREAMLIT_BROWSER_GATHER_USAGE_STATS
+        value: "false"
     numInstances: 1
     healthCheckPath: /
