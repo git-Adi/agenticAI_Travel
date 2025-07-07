@@ -22,7 +22,6 @@ COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir git+https://github.com/agno-ai/agno-python.git@main && \
     pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application

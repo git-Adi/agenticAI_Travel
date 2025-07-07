@@ -2,9 +2,10 @@ import streamlit as st
 import json
 import os
 from serpapi import GoogleSearch
-from agno.agent import Agent
-from agno.tools.serpapi import SerpApiTools
-from agno.models.google import Gemini
+from langchain.agents import AgentType, initialize_agent, Tool
+from langchain.chat_models import ChatOpenAI
+from langchain.llms import OpenAI
+from langchain.utilities import SerpAPIWrapper
 from datetime import datetime
 import pandas as pd
 import numpy as np
@@ -16,6 +17,27 @@ from typing import List, Dict, Any
 import re
 import time
 from dateutil.relativedelta import relativedelta
+
+# Initialize the language model
+llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
+
+# Initialize SerpAPI tool
+search = SerpAPIWrapper()
+tools = [
+    Tool(
+        name="Search",
+        func=search.run,
+        description="Useful for when you need to answer questions about current events or search the web"
+    )
+]
+
+# Initialize the agent
+agent = initialize_agent(
+    tools=tools,
+    llm=llm,
+    agent=AgentType.OPENAI_FUNCTIONS,
+    verbose=True
+)
 
 # Set up Streamlit UI with a travel-friendly theme
 st.set_page_config(page_title="🌍 AI Travel Planner", layout="wide")
