@@ -1,11 +1,10 @@
 services:
   - type: web
     name: travel-agenticai
-    env: python
+    env: docker
     plan: free
     region: oregon
-    buildCommand: "./build.sh"
-    startCommand: "streamlit run run.py --server.port=$PORT --server.address=0.0.0.0"
+    dockerfilePath: Dockerfile
     envVars:
       - key: PORT
         value: "10000"

@@ -6,6 +6,16 @@ from agno.agent import Agent
 from agno.tools.serpapi import SerpApiTools
 from agno.models.google import Gemini
 from datetime import datetime
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from PIL import Image
+from io import BytesIO
+import base64
+from typing import List, Dict, Any
+import re
+import time
+from dateutil.relativedelta import relativedelta
 
 # Set up Streamlit UI with a travel-friendly theme
 st.set_page_config(page_title="🌍 AI Travel Planner", layout="wide")
