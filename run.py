@@ -356,11 +356,11 @@ else:
 
 if 'hotel_restaurant_results' in locals():
     st.subheader("🏨 Hotels & Restaurants 🍽️")
-    st.write(hotel_restaurant_results.content)
-
-    st.subheader("🗺️ Your Personalized Itinerary")
-    st.write(itinerary.content)
-    st.success("Travel plan generated successfully!")
+    st.write(hotel_restaurant_results)
+    
+st.subheader("🗺️ Your Personalized Itinerary")
+st.write(itinerary)
+st.success("Travel plan generated successfully!")
 
 # Add a footer
 st.markdown("---")
