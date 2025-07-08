@@ -2,10 +2,9 @@ import streamlit as st
 import json
 import os
 from serpapi import GoogleSearch
+from langchain_community.utilities import SerpAPIWrapper
 from langchain.agents import AgentType, initialize_agent, Tool
-from langchain.chat_models import ChatOpenAI
-from langchain.llms import OpenAI
-from langchain.utilities import SerpAPIWrapper
+from langchain_openai import ChatOpenAI
 from datetime import datetime
 import pandas as pd
 import numpy as np
