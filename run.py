@@ -275,9 +275,12 @@ if st.button("🚀 Generate Travel Plan"):
     with st.spinner("🗺️ Creating your personalized itinerary..."):
         planning_prompt = (
             f"Based on the following data, create a {num_days}-day itinerary for a {travel_theme.lower()} trip to {destination}. "
-            f"The traveler enjoys: {activity_preferences}. Budget: {budget}. Flight Class: {flight_class}. Hotel Rating: {hotel_rating}. "
-            f"Visa Requirement: {visa_required}. Travel Insurance: {travel_insurance}. Research: {research_results.content}. "
-            f"Flights: {json.dumps(cheapest_flights)}. Hotels & Restaurants: {hotel_restaurant_results.content}."
+            f"The traveler enjoys: {activity_preferences}. Budget: {budget}. Flight Class: {flight_class}. "
+            f"Hotel Rating: {hotel_rating}. "
+            f"Visa Requirement: {visa_required}. Travel Insurance: {travel_insurance}. "
+            f"Research: {research_results}. "
+            f"Flights: {json.dumps(cheapest_flights)}. "
+            f"Hotels & Restaurants: {hotel_restaurant_results}."
         )
         itinerary = planner_agent.run(planning_prompt)
 
