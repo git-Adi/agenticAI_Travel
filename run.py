@@ -323,54 +323,60 @@ if 'cheapest_flights' in locals() and cheapest_flights is not None:
             booking_link = f"https://www.google.com/travel/flights?tfs={booking_token}" if booking_token else "#"
             
             # Flight card layout
-            flight_card = f"""
-            <div style='
-                border: 1px solid #e0e0e0;
-                border-radius: 10px;
-                padding: 15px;
-                margin: 10px 0;
-                background-color: #ffffff;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            '>
-                <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;'>
-                    <div>
-                        <h4 style='margin: 0 0 5px 0;'>{airline_name}</h4>
-                        <p style='margin: 0;'><strong>Price:</strong> <span style='color: #2e7d32; font-size: 1.2em;'>{price}</span></p>
-                    </div>
-                    {f'<img src="{airline_logo}" width="60" style="border-radius: 5px;" alt="Airline Logo">' if airline_logo else ''}
-                </div>
-                <div style='margin: 10px 0;'>
-                    <p style='margin: 5px 0;'><strong>Departure:</strong> {departure_time} from {departure_airport_code}</p>
-                    <p style='margin: 5px 0;'><strong>Arrival:</strong> {arrival_time} at {arrival_airport_code}</p>
-                    <p style='margin: 5px 0;'><strong>Duration:</strong> {total_duration}</p>
-                </div>
-                <a href='{booking_link}' target='_blank' style='
-                    display: block;
-                    text-align: center;
-                    background-color: #1976d2;
-                    color: white;
-                    padding: 8px 16px;
-                    border-radius: 4px;
-                    text-decoration: none;
-                    font-weight: 500;
-                    margin-top: 10px;
+            try:
+                flight_card = f"""
+                <div style='
+                    border: 1px solid #e0e0e0;
+                    border-radius: 10px;
+                    padding: 15px;
+                    margin: 10px 0;
+                    background-color: #ffffff;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                 '>
-                    Book Now
-                </a>
-            </div>
-            """
-            st.markdown(flight_card, unsafe_allow_html=True)
+                    <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;'>
+                        <div>
+                            <h4 style='margin: 0 0 5px 0;'>{airline_name}</h4>
+                            <p style='margin: 0;'><strong>Price:</strong> <span style='color: #2e7d32; font-size: 1.2em;'>{price}</span></p>
+                        </div>
+                        {f'<img src="{airline_logo}" width="60" style="border-radius: 5px;" alt="Airline Logo">' if airline_logo else ''}
+                    </div>
+                    <div style='margin: 10px 0;'>
+                        <p style='margin: 5px 0;'><strong>Departure:</strong> {departure_time} from {departure_airport_code}</p>
+                        <p style='margin: 5px 0;'><strong>Arrival:</strong> {arrival_time} at {arrival_airport_code}</p>
+                        <p style='margin: 5px 0;'><strong>Duration:</strong> {total_duration}</p>
+                    </div>
+                    <a href='{booking_link}' target='_blank' style='
+                        display: block;
+                        text-align: center;
+                        background-color: #1976d2;
+                        color: white;
+                        padding: 8px 16px;
+                        border-radius: 4px;
+                        text-decoration: none;
+                        font-weight: 500;
+                        margin-top: 10px;
+                    '>
+                        Book Now
+                    </a>
+                </div>
+                """
+                st.markdown(flight_card, unsafe_allow_html=True)
+            except Exception as e:
+                st.error(f"Error displaying flight information: {str(e)}")
+                st.warning("Could not display flight details. Please try again.")
 
-else:
-    st.warning("No flight data available.")
-
-if 'hotel_restaurant_results' in locals():
+# Display hotel and restaurant results if available
+if 'hotel_restaurant_results' in locals() and hotel_restaurant_results is not None:
     st.subheader("🏨 Hotels & Restaurants 🍽️")
     st.write(hotel_restaurant_results)
-    
-st.subheader("🗺️ Your Personalized Itinerary")
-st.write(itinerary)
-st.success("Travel plan generated successfully!")
+
+# Display itinerary if available
+if 'itinerary' in locals() and itinerary is not None:
+    st.subheader("🗺️ Your Personalized Itinerary")
+    st.write(itinerary)
+    st.success("Travel plan generated successfully!")
+else:
+    st.warning("No flight data available. Please generate a travel plan first.")
 
 # Add a footer
 st.markdown("---")
