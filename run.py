@@ -250,9 +250,14 @@ hotel_restaurant_finder = initialize_agent(
     }
 )
 
+# Initialize variables
+itinerary = None
+hotel_restaurant_results = None
+cheapest_flights = None
+
 # Generate Travel Plan
 if st.button("🚀 Generate Travel Plan"):
-    with st.spinner("+ Fetching best flight options..."):
+    with st.spinner("✈️ Fetching best flight options..."):
         flight_data = fetch_flights(source, destination, departure_date, return_date)
         cheapest_flights = extract_cheapest_flights(flight_data)
 
@@ -284,72 +289,77 @@ if st.button("🚀 Generate Travel Plan"):
         )
         itinerary = planner_agent.run(planning_prompt)
 
-    # Display Results
+# Display Results
+if 'cheapest_flights' in locals() and cheapest_flights is not None:
     st.subheader("✈️ Cheapest Flight Options")
-    if cheapest_flights:
-        cols = st.columns(len(cheapest_flights))
-        for idx, flight in enumerate(cheapest_flights):
-            with cols[idx]:
-                airline_logo = flight.get("airline_logo", "")
-                airline_name = flight.get("airline", "Unknown Airline")
-                price = flight.get("price", "Not Available")
-                total_duration = flight.get("total_duration", "N/A")
-    
-                flights_info = flight.get("flights", [{}])
-                departure = flights_info[0].get("departure_airport", {})
-                arrival = flights_info[-1].get("arrival_airport", {})
-                airline_name = flights_info[0].get("airline", "Unknown Airline")
-    
-                departure_time = format_datetime(departure.get("time", "N/A"))
-                arrival_time = format_datetime(arrival.get("time", "N/A"))
-    
-                departure_token = flight.get("departure_token", "")
-    
-                if departure_token:
-                    params_with_token = {
-                        **params,
-                        "departure_token": departure_token  # Add the token here
-                    }
-                    search_with_token = GoogleSearch(params_with_token)
-                    results_with_booking = search_with_token.get_dict()
-                    booking_options = results_with_booking['best_flights'][idx]['booking_token']
-                
-                booking_link = f"https://www.google.com/travel/flights?tfs={booking_options}" if booking_options else "#"
-                print(booking_link)
-
-                # Flight card layout
-                st.markdown(
-                    f"""
-                    <div style="
-                        border: 2px solid #ddd;
-                        border-radius: 10px;
-                        padding: 15px;
-                        text-align: center;
-                        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-                        background-color: #f9f9f9;
-                        margin-bottom: 20px;
-                    ">
-                        <img src="{airline_logo}" width="100" alt="Flight Logo" />
-                        <h3 style="margin: 10px 0;">{airline_name}</h3>
-                        <p><strong>Departure:</strong> {departure_time}</p>
-                        <p><strong>Arrival:</strong> {arrival_time}</p>
-                        <p><strong>Duration:</strong> {total_duration} min</p>
-                        <h2 style="color: #008000;">💰 {price}</h2>
-                        <a href="{booking_link}" target="_blank" style="
-                            display: inline-block;
-                            padding: 10px 20px;
-                            font-size: 16px;
-                            font-weight: bold;
-                            color: #fff;
-                            background-color: #007bff;
-                            text-decoration: none;
-                            border-radius: 5px;
-                            margin-top: 10px;
-                        ">Book Now</a>
+    cols = st.columns(len(cheapest_flights))
+    for idx, flight in enumerate(cheapest_flights):
+        with cols[idx]:
+            airline_logo = flight.get("airline_logo", "")
+            airline_name = flight.get("airline", "Unknown Airline")
+            price = flight.get("price", "Not Available")
+            departure = flight.get("departure", {})
+            departure_time = format_datetime(departure.get("time", ""))
+            departure_airport = departure.get("airport", "")
+            
+            # Get flight details
+            airline_name = flight.get("airline", "Unknown Airline")
+            price = flight.get("price", "Price not available")
+            total_duration = flight.get("total_duration", "N/A")
+            
+            # Get flight segments
+            flights_info = flight.get("flights", [{}])
+            departure = flights_info[0].get("departure_airport", {}) if flights_info else {}
+            arrival = flights_info[-1].get("arrival_airport", {}) if flights_info else {}
+            
+            # Format departure and arrival times
+            departure_time = format_datetime(departure.get("time", ""))
+            arrival_time = format_datetime(arrival.get("time", ""))
+            departure_airport_code = departure.get("iata", "")
+            arrival_airport_code = arrival.get("iata", "")
+            
+            # Generate booking link if available
+            booking_token = flight.get("booking_token", "")
+            booking_link = f"https://www.google.com/travel/flights?tfs={booking_token}" if booking_token else "#"
+            
+            # Flight card layout
+            flight_card = f"""
+            <div style='
+                border: 1px solid #e0e0e0;
+                border-radius: 10px;
+                padding: 15px;
+                margin: 10px 0;
+                background-color: #ffffff;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            '>
+                <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;'>
+                    <div>
+                        <h4 style='margin: 0 0 5px 0;'>{airline_name}</h4>
+                        <p style='margin: 0;'><strong>Price:</strong> <span style='color: #2e7d32; font-size: 1.2em;'>{price}</span></p>
                     </div>
-                    """,
-                    unsafe_allow_html=True
-                )
+                    {f'<img src="{airline_logo}" width="60" style="border-radius: 5px;" alt="Airline Logo">' if airline_logo else ''}
+                </div>
+                <div style='margin: 10px 0;'>
+                    <p style='margin: 5px 0;'><strong>Departure:</strong> {departure_time} from {departure_airport_code}</p>
+                    <p style='margin: 5px 0;'><strong>Arrival:</strong> {arrival_time} at {arrival_airport_code}</p>
+                    <p style='margin: 5px 0;'><strong>Duration:</strong> {total_duration}</p>
+                </div>
+                <a href='{booking_link}' target='_blank' style='
+                    display: block;
+                    text-align: center;
+                    background-color: #1976d2;
+                    color: white;
+                    padding: 8px 16px;
+                    border-radius: 4px;
+                    text-decoration: none;
+                    font-weight: 500;
+                    margin-top: 10px;
+                '>
+                    Book Now
+                </a>
+            </div>
+            """
+            st.markdown(flight_card, unsafe_allow_html=True)
 
 else:
     st.warning("No flight data available.")
