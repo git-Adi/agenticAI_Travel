@@ -11,9 +11,9 @@ services:
       - key: PYTHONUNBUFFERED
         value: "true"
       - key: SERPAPI_API_KEY
-        value: your_serpapi_key_here  # Replace with your actual SERP API key
-      - key: OPENAI_API_KEY
-        value: your_openai_api_key_here  # Replace with your actual OpenAI API key
+        value: "8367340a59da41e422df03f7aa8a570866bae326fb10f5ca7d3cba8a6001149f" # This will be set in the Render dashboard
+      - key: GOOGLE_API_KEY
+        value: "AIzaSyCHZ-yq2fW-GBAB_kj_nUNOHp92vF5l0MI" # This will be set in the Render dashboard
       - key: STREAMLIT_SERVER_PORT
         value: "10000"
       - key: STREAMLIT_SERVER_HEADLESS

@@ -32,14 +32,21 @@ llm = ChatGoogleGenerativeAI(
 )
 
 # Initialize SerpAPI tool with API key from environment
-search = SerpAPIWrapper(serpapi_api_key=os.getenv("SERPAPI_API_KEY"))
-tools = [
-    Tool(
-        name="Search",
-        func=search.run,
-        description="Useful for when you need to answer questions about current events or search the web"
-    )
-]
+serpapi_key = os.getenv("SERPAPI_API_KEY")
+
+# Only initialize search tools if API key is available
+if serpapi_key:
+    search = SerpAPIWrapper(serpapi_api_key=serpapi_key)
+    tools = [
+        Tool(
+            name="Search",
+            func=search.run,
+            description="Useful for when you need to answer questions about current events or search the web"
+        )
+    ]
+else:
+    st.warning("⚠️ SERPAPI_API_KEY environment variable is not set. Web search functionality will be limited.")
+    tools = []
 
 # Initialize the agent
 agent = initialize_agent(
