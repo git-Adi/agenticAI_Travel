@@ -45,7 +45,7 @@ if serpapi_key:
         )
     ]
 else:
-    st.warning("⚠️ SERPAPI_API_KEY environment variable is not set. Web search functionality will be limited.")
+    # st.warning("⚠️ SERPAPI_API_KEY environment variable is not set. Web search functionality will be limited.")
     tools = []
 
 # Initialize the agent
@@ -364,4 +364,4 @@ st.success("Travel plan generated successfully!")
 
 # Add a footer
 st.markdown("---")
-st.markdown("### Need help? Contact our support team at support@travelplanner.com")
+st.markdown("### Need help? Contact our support team at aditya.arya3131@gmail.com")
