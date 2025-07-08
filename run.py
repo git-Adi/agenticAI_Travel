@@ -202,45 +202,52 @@ def extract_cheapest_flights(flight_data):
     return sorted_flights
 
 
-researcher = Agent(
-    name='Researcher',
-    instructions=[
-        "Identify the travel destination specified by the user.",
-        "Gather detailed information on the destination, including climate, culture and safety tips.",
-        "Find popular attractions, landmarks, and must-visit places.",
-        "Search for activities that match the user's interests and travel style.",
-        "Prioritize information from reliable sources and official travel guides.",
-        "Provide well structured summaries with key insights and recommendations."
-    ],
-    model=Gemini(id='gemini-2.0-flash-exp'),
-    tools=[SerpApiTools(api_key=SERPAPI_KEY)],
-    add_datetime_to_instructions=True
+# Create a researcher agent using LangChain with Gemini
+researcher_agent = initialize_agent(
+    tools=tools,
+    llm=llm,
+    agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
+    verbose=True,
+    agent_kwargs={
+        'prefix': '''You are a travel researcher. Your tasks are:
+        1. Identify the travel destination specified by the user.
+        2. Gather detailed information on the destination, including climate, culture and safety tips.
+        3. Find popular attractions, landmarks, and must-visit places.
+        4. Search for activities that match the user's interests and travel style.
+        5. Prioritize information from reliable sources and official travel guides.
+        6. Provide well structured summaries with key insights and recommendations.'''
+    }
 )
 
-planner = Agent(
-    name='Planner',
-    instructions=[
-        "Gather details about the user's travel preference and budget.",
-        "Create a detailed itinerary with scheduled activities and estimated costs.",
-        "Ensure the itinerary includes transportation options and travel time estimates.",
-        "Present the itinerary in a structured format."
-    ],
-    model=Gemini(id='gemini-2.0-flash-exp'),
-    add_datetime_to_instructions=True
+# Create a planner agent using LangChain with Gemini
+planner_agent = initialize_agent(
+    tools=tools,
+    llm=llm,
+    agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
+    verbose=True,
+    agent_kwargs={
+        'prefix': '''You are a travel planner. Your tasks are:
+        1. Gather details about the user's travel preferences and budget.
+        2. Create a detailed itinerary with scheduled activities and estimated costs.
+        3. Ensure the itinerary includes transportation options and travel time estimates.
+        4. Present the itinerary in a clear, structured format.'''
+    }
 )
 
-hotel_restaurant_finder = Agent(
-    name="Hotel & Restaurant Finder",
-    instructions=[
-        "Identify key locations in the user's travel itinerary.",
-        "Search for highly rated hotels near those locations.",
-        "Search for top-rated restaurants based on cuisine preferences and proximity.",
-        "Prioritize results based on user preferences, ratings, and availability.",
-        "Provide direct booking links or reservation options where possible."
-    ],
-    model=Gemini(id="gemini-2.0-flash-exp"),
-    tools=[SerpApiTools(api_key=SERPAPI_KEY)],
-    add_datetime_to_instructions=True,
+# Create a hotel and restaurant finder agent using LangChain with Gemini
+hotel_restaurant_finder = initialize_agent(
+    tools=tools,
+    llm=llm,
+    agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
+    verbose=True,
+    agent_kwargs={
+        'prefix': '''You are a hotel and restaurant finder. Your tasks are:
+        1. Identify key locations in the user's travel itinerary.
+        2. Search for highly rated hotels near those locations.
+        3. Search for top-rated restaurants based on cuisine preferences and proximity.
+        4. Prioritize results based on user preferences, ratings, and availability.
+        5. Provide direct booking links or reservation options where possible.'''
+    }
 )
 
 # Generate Travel Plan
