@@ -11,9 +11,9 @@ services:
       - key: PYTHONUNBUFFERED
         value: "true"
       - key: SERPAPI_API_KEY
-        value: "8367340a59da41e422df03f7aa8a570866bae326fb10f5ca7d3cba8a6001149f" # This will be set in the Render dashboard
+        value: "05d7042d094556113f2b55287f8b20cf6af804b4b2c288c8b7c0c09e7bfacf9e" # This will be set in the Render dashboard
       - key: GOOGLE_API_KEY
-        value: "AIzaSyCHZ-yq2fW-GBAB_kj_nUNOHp92vF5l0MI" # This will be set in the Render dashboard
+        value: "AIzaSyACc6B-VlMgaw36jhxwKfGUzVPvsQfoNq8" # This will be set in the Render dashboard
       - key: STREAMLIT_SERVER_PORT
         value: "10000"
       - key: STREAMLIT_SERVER_HEADLESS
