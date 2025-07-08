@@ -4,7 +4,7 @@ import os
 from serpapi import GoogleSearch
 from langchain_community.utilities import SerpAPIWrapper
 from langchain.agents import AgentType, initialize_agent, Tool
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from datetime import datetime
 import pandas as pd
 import numpy as np
@@ -17,11 +17,22 @@ import re
 import time
 from dateutil.relativedelta import relativedelta
 
-# Initialize the language model
-llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
+# Initialize the language model with API key from environment
+import os
+from dotenv import load_dotenv
 
-# Initialize SerpAPI tool
-search = SerpAPIWrapper()
+# Load environment variables
+load_dotenv()
+
+# Initialize Google Gemini client
+llm = ChatGoogleGenerativeAI(
+    model="gemini-2.0-flash-exp",
+    google_api_key=os.getenv("GOOGLE_API_KEY"),
+    temperature=0.7
+)
+
+# Initialize SerpAPI tool with API key from environment
+search = SerpAPIWrapper(serpapi_api_key=os.getenv("SERPAPI_API_KEY"))
 tools = [
     Tool(
         name="Search",
