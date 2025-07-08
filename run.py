@@ -263,14 +263,14 @@ if st.button("🚀 Generate Travel Plan"):
             f"The traveler enjoys: {activity_preferences}. Budget: {budget}. Flight Class: {flight_class}. "
             f"Hotel Rating: {hotel_rating}. Visa Requirement: {visa_required}. Travel Insurance: {travel_insurance}."
         )
-        research_results = researcher.run(research_prompt, stream=False)
+        research_results = researcher_agent.run(research_prompt)
 
     with st.spinner("🍽️ Searching for hotels & restaurants..."):
         hotel_restaurant_prompt = (
             f"Find the best hotels and restaurants near popular attractions in {destination} for a {travel_theme.lower()} trip. "
             f"Budget: {budget}. Hotel Rating: {hotel_rating}. Preferred activities: {activity_preferences}."
         )
-        hotel_restaurant_results = hotel_restaurant_finder.run(hotel_restaurant_prompt, stream=False)
+        hotel_restaurant_results = hotel_restaurant_finder.run(hotel_restaurant_prompt)
 
     with st.spinner("🗺️ Creating your personalized itinerary..."):
         planning_prompt = (
@@ -279,7 +279,7 @@ if st.button("🚀 Generate Travel Plan"):
             f"Visa Requirement: {visa_required}. Travel Insurance: {travel_insurance}. Research: {research_results.content}. "
             f"Flights: {json.dumps(cheapest_flights)}. Hotels & Restaurants: {hotel_restaurant_results.content}."
         )
-        itinerary = planner.run(planning_prompt, stream=False)
+        itinerary = planner_agent.run(planning_prompt)
 
     # Display Results
     st.subheader("✈️ Cheapest Flight Options")
