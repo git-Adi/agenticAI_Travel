@@ -342,24 +342,28 @@ if 'cheapest_flights' in locals() and cheapest_flights is not None:
                     st.markdown(f"**Arrival:** {arrival_time} at {arrival_airport_code}")
                     st.markdown(f"**Duration:** {total_duration}")
                     
-                    # Use a button with a link (this will open in a new tab)
-                    st.markdown(f"""
-                    <a href="{booking_link}" target="_blank">
-                        <button style='
-                            width: 100%;
-                            background-color: #1976d2;
-                            color: white;
-                            padding: 8px 16px;
-                            border: none;
-                            border-radius: 4px;
-                            cursor: pointer;
-                            font-weight: 500;
-                            margin-top: 10px;
-                        '>
-                            Book Now
-                        </button>
-                    </a>
-                    """, unsafe_allow_html=True)
+                    # Add some space before the button
+                    st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
+                    
+                    # Create a container for the button to control width
+                    button_container = st.container()
+                    with button_container:
+                        # Use st.link_button for reliable redirection
+                        st.markdown(f"""
+                        <a href="{booking_link}" target="_blank" style="text-decoration: none;">
+                            <div style="
+                                background-color: #1976d2;
+                                color: white;
+                                padding: 8px 16px;
+                                border-radius: 4px;
+                                text-align: center;
+                                font-weight: 500;
+                                cursor: pointer;
+                            ">
+                                Book Now
+                            </div>
+                        </a>
+                        """, unsafe_allow_html=True)
             except Exception as e:
                 st.error(f"Error displaying flight information: {str(e)}")
                 st.warning("Could not display flight details. Please try again.")
