@@ -324,43 +324,42 @@ if 'cheapest_flights' in locals() and cheapest_flights is not None:
             
             # Flight card layout
             try:
-                flight_card = f"""
-                <div style='
-                    border: 1px solid #e0e0e0;
-                    border-radius: 10px;
-                    padding: 15px;
-                    margin: 10px 0;
-                    background-color: #ffffff;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                '>
-                    <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;'>
-                        <div>
-                            <h4 style='margin: 0 0 5px 0;'>{airline_name}</h4>
-                            <p style='margin: 0;'><strong>Price:</strong> <span style='color: #2e7d32; font-size: 1.2em;'>{price}</span></p>
-                        </div>
-                        {f'<img src="{airline_logo}" width="60" style="border-radius: 5px;" alt="Airline Logo">' if airline_logo else ''}
-                    </div>
-                    <div style='margin: 10px 0;'>
-                        <p style='margin: 5px 0;'><strong>Departure:</strong> {departure_time} from {departure_airport_code}</p>
-                        <p style='margin: 5px 0;'><strong>Arrival:</strong> {arrival_time} at {arrival_airport_code}</p>
-                        <p style='margin: 5px 0;'><strong>Duration:</strong> {total_duration}</p>
-                    </div>
-                    <a href='{booking_link}' target='_blank' style='
-                        display: block;
-                        text-align: center;
-                        background-color: #1976d2;
-                        color: white;
-                        padding: 8px 16px;
-                        border-radius: 4px;
-                        text-decoration: none;
-                        font-weight: 500;
-                        margin-top: 10px;
-                    '>
-                        Book Now
+                # Create a container for the flight card
+                flight_card = st.container()
+                with flight_card:
+                    # Use columns for the header layout
+                    col1, col2 = st.columns([3, 1])
+                    with col1:
+                        st.markdown(f"### {airline_name}")
+                        st.markdown(f"**Price:** <span style='color: #2e7d32; font-size: 1.2em;'>{price}</span>", unsafe_allow_html=True)
+                    
+                    with col2:
+                        if airline_logo:
+                            st.image(airline_logo, width=60)
+                    
+                    # Flight details
+                    st.markdown(f"**Departure:** {departure_time} from {departure_airport_code}")
+                    st.markdown(f"**Arrival:** {arrival_time} at {arrival_airport_code}")
+                    st.markdown(f"**Duration:** {total_duration}")
+                    
+                    # Use a button with a link (this will open in a new tab)
+                    st.markdown(f"""
+                    <a href="{booking_link}" target="_blank">
+                        <button style='
+                            width: 100%;
+                            background-color: #1976d2;
+                            color: white;
+                            padding: 8px 16px;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-weight: 500;
+                            margin-top: 10px;
+                        '>
+                            Book Now
+                        </button>
                     </a>
-                </div>
-                """
-                st.markdown(flight_card, unsafe_allow_html=True)
+                    """, unsafe_allow_html=True)
             except Exception as e:
                 st.error(f"Error displaying flight information: {str(e)}")
                 st.warning("Could not display flight details. Please try again.")
