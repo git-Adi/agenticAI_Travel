@@ -322,6 +322,16 @@ if 'cheapest_flights' in locals() and cheapest_flights is not None:
             booking_token = flight.get("booking_token", "")
             booking_link = f"https://www.google.com/travel/flights?tfs={booking_token}" if booking_token else "#"
             
+            # Debug output
+            print(f"Booking Token: {booking_token}")
+            print(f"Booking Link: {booking_link}")
+            print(f"Flight Data: {flight}")
+            
+            # If no booking token, try to get direct link
+            if not booking_token and flight.get('deep_link'):
+                booking_link = flight['deep_link']
+                print(f"Using deep link: {booking_link}")
+            
             # Flight card layout
             try:
                 # Create a container for the flight card
@@ -348,21 +358,23 @@ if 'cheapest_flights' in locals() and cheapest_flights is not None:
                     # Create a container for the button to control width
                     button_container = st.container()
                     with button_container:
-                        # Use st.link_button for reliable redirection
+                        # Create a form with a button that will handle the redirection
                         st.markdown(f"""
-                        <a href="{booking_link}" target="_blank" style="text-decoration: none;">
-                            <div style="
+                        <form action="{booking_link}" method="get" target="_blank" style="margin: 0; padding: 0;">
+                            <button type="submit" style="
+                                width: 100%;
                                 background-color: #1976d2;
                                 color: white;
                                 padding: 8px 16px;
+                                border: none;
                                 border-radius: 4px;
                                 text-align: center;
                                 font-weight: 500;
                                 cursor: pointer;
                             ">
                                 Book Now
-                            </div>
-                        </a>
+                            </button>
+                        </form>
                         """, unsafe_allow_html=True)
             except Exception as e:
                 st.error(f"Error displaying flight information: {str(e)}")
